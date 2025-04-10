@@ -73,7 +73,7 @@ public class EvenementController {
                                                         @RequestParam ("description") String description,
                                                         @RequestParam ("lieux.id") String lieuxId,
                                                         @RequestParam ("category.id") String categoryId,
-                                                        @RequestParam ("perdiode.id") String periodeId) {
+                                                        @RequestParam ("periode.id") String periodeId) {
         Lieux lieux = new Lieux();
         lieux.setId(lieuxId);
         Category category = new Category();
