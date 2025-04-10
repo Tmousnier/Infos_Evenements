@@ -9,7 +9,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface EvenementMapper {
         EvenementDto toDto(Evenement evenement);
-
         Evenement toEntity(EvenementInput evenementInput);
 }
 
