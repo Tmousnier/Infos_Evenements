@@ -31,6 +31,10 @@ public class EvenementService {
     public Page<Evenement> getAll(Pageable pageable, Predicate predicate) {
         return evenementRepository.findAll(predicate, pageable);
     }
+    public Page<EvenementDto> searchByLibelle(String keyword, Pageable pageable) {
+        return evenementRepository.searchByLibelle(keyword, pageable)
+                .map(evenementMapper::toDto);
+    }
     public EvenementDto getById(String id) {
         return evenementMapper.toDto(evenementRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("l'id de l'annonce est introuvable")));
     }
@@ -49,14 +53,13 @@ public class EvenementService {
         evenementRepository.delete(evenement);
     }
     public EvenementDto updateEvenement(String id, EvenementInput evenementInput) {
-        Evenement evenement = evenementRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid annonce ID"));
+        Evenement evenement = evenementRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Événement non trouvé avec l'ID : " + id));
         Lieux lieux = lieuxRepository.findById(evenementInput.lieux().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid ville ID"));
-
+                .orElseThrow(() -> new IllegalArgumentException("Lieu non trouvé avec l'ID : " + evenementInput.lieux().getId()));
         evenement.setLibelle(evenementInput.libelle());
         evenement.setDescription(evenementInput.description());
         evenement.setLieux(lieux);
-
         Evenement updatedEvenement = evenementRepository.save(evenement);
         return evenementMapper.toDto(updatedEvenement);
     }

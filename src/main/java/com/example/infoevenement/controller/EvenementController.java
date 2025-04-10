@@ -5,6 +5,7 @@ import com.example.infoevenement.dao.Lieux;
 import com.example.infoevenement.dao.QEvenement;
 import com.example.infoevenement.dto.EvenementDto;
 import com.example.infoevenement.dto.EvenementInput;
+import com.example.infoevenement.mapper.EvenementMapper;
 import com.example.infoevenement.service.EvenementService;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,18 @@ import org.springframework.web.bind.annotation.*;
 public class EvenementController {
 
     private final EvenementService evenementService;
+    private final EvenementMapper evenementMapper;
 
     @Autowired
-    public EvenementController(EvenementService evenementService) {
+    public EvenementController(EvenementService evenementService, EvenementMapper evenementMapper) {
         this.evenementService = evenementService;
+        this.evenementMapper = evenementMapper;
+    }
+
+    @GetMapping("/libelle/{keyword}")
+    public ResponseEntity<Page<EvenementDto>> findByLibleContaining(@PathVariable String keyword, Pageable pageable) {
+        Page<EvenementDto> annonces = evenementService.searchByLibelle(keyword, pageable);
+        return ResponseEntity.ok(annonces);
     }
 
     @GetMapping("/search")
@@ -30,8 +39,14 @@ public class EvenementController {
             @RequestParam(value = "lieux", required = false) String lieux,
             Pageable pageable) {
 
-        EvenementPredicateBuilder predicateBuilder = new EvenementPredicateBuilder();
-        BooleanExpression predicate = predicateBuilder.build(libelle, lieux);
+        QEvenement qEvenement = QEvenement.evenement;
+        BooleanExpression predicate = qEvenement.isNotNull();
+        if (libelle != null) {
+            predicate = predicate.and(qEvenement.libelle.containsIgnoreCase(libelle));
+        }
+        if (lieux != null) {
+            predicate = predicate.and(qEvenement.lieux.id.eq(lieux));
+        }
 
         Page<Evenement> evenements = evenementService.getAll(pageable, predicate);
         return ResponseEntity.ok(evenements);
