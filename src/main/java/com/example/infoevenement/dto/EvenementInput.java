@@ -12,14 +12,14 @@ public record EvenementInput (
      Periode periode
 ) {
     public EvenementInput {
-        if (lieux == null) {
-            throw new IllegalArgumentException("Invalid lieux");
+        if (libelle == null || libelle.isBlank()) {
+            throw new IllegalArgumentException("Invalid libelle");
         }
         if (description == null || description.isBlank()) {
             throw new IllegalArgumentException("Invalid description");
         }
-        if (libelle == null || libelle.isBlank()) {
-            throw new IllegalArgumentException("Invalid libelle");
+        if (lieux == null) {
+            throw new IllegalArgumentException("Invalid lieux");
         }
         if (category == null) {
             throw new IllegalArgumentException("Invalid category");
