@@ -48,11 +48,11 @@ public class EvenementService {
     }
     public EvenementDto createEvenement(EvenementInput evenementInput) {
         Lieux lieux = lieuxRepository.findById(evenementInput.lieux().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Lieux ID"));
         Category category = categoryRepository.findById(evenementInput.category().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
         Periode periode = periodeRepository.findById(evenementInput.periode().getId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid Periode ID"));
 
         Evenement evenement = evenementMapper.toEntity(evenementInput);
         evenement.setLieux(lieux);
