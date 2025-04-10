@@ -7,11 +7,12 @@ import com.example.infoevenement.dto.EvenementDto;
 import com.example.infoevenement.dto.EvenementInput;
 import com.example.infoevenement.repository.EvenementRepository;
 import com.example.infoevenement.repository.LieuxRepository;
+import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class EvenementService {
@@ -27,10 +28,12 @@ public class EvenementService {
         this.lieuxRepository = lieuxRepository;
     }
 
-    public List<Evenement> getAll() { return evenementRepository.findAll(); }
-
-    public Evenement getById(String id) { return evenementRepository.findById(id).orElse(null); }
-
+    public Page<Evenement> getAll(Pageable pageable, Predicate predicate) {
+        return evenementRepository.findAll(predicate, pageable);
+    }
+    public EvenementDto getById(String id) {
+        return evenementMapper.toDto(evenementRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("l'id de l'annonce est introuvable")));
+    }
     public EvenementDto createEvenement(EvenementInput evenementInput) {
         Lieux lieux = lieuxRepository.findById(evenementInput.lieux().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category ID"));
@@ -41,12 +44,10 @@ public class EvenementService {
         Evenement savedEvenement = evenementRepository.save(evenement);
         return evenementMapper.toDto(savedEvenement);
     }
-
     public void deleteEvenement(String id) {
-        Evenement ville = evenementRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid ville ID"));
-        evenementRepository.delete(ville);
+        Evenement evenement = evenementRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid evenement ID"));
+        evenementRepository.delete(evenement);
     }
-
     public EvenementDto updateEvenement(String id, EvenementInput evenementInput) {
         Evenement evenement = evenementRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid annonce ID"));
         Lieux lieux = lieuxRepository.findById(evenementInput.lieux().getId())
