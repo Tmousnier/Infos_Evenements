@@ -36,4 +36,10 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
+    public Category deleteCategory(String id) {
+        Category category = categoryRepository.findById(id).orElseThrow();
+        categoryRepository.delete(category);
+        return category;
+    }
+
 }
