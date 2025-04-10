@@ -10,7 +10,7 @@ public record EvenementInput (
      Lieux lieux
 ) {
     public EvenementInput {
-        if (lieux != null) {
+        if (lieux == null) {
             throw new IllegalArgumentException("Invalid lieux");
         }
         if (description == null || description.isBlank()) {
