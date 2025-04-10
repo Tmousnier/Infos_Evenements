@@ -21,4 +21,10 @@ public class Evenement {
     @ManyToOne
     @JoinColumn(name = "lieux_id", referencedColumnName = "id")
     private Lieux lieux;
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
+    @ManyToOne
+    @JoinColumn(name = "periode_id", referencedColumnName = "id")
+    private Periode periode;
 }

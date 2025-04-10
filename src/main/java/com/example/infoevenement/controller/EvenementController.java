@@ -1,8 +1,6 @@
 package com.example.infoevenement.controller;
 
-import com.example.infoevenement.dao.Evenement;
-import com.example.infoevenement.dao.Lieux;
-import com.example.infoevenement.dao.QEvenement;
+import com.example.infoevenement.dao.*;
 import com.example.infoevenement.dto.EvenementDto;
 import com.example.infoevenement.dto.EvenementInput;
 import com.example.infoevenement.mapper.EvenementMapper;
@@ -37,6 +35,9 @@ public class EvenementController {
     public ResponseEntity<Page<Evenement>> getEvenements(
             @RequestParam(value = "libelle", required = false) String libelle,
             @RequestParam(value = "lieux", required = false) String lieux,
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "periode", required = false) String periode,
+
             Pageable pageable) {
 
         QEvenement qEvenement = QEvenement.evenement;
@@ -46,6 +47,12 @@ public class EvenementController {
         }
         if (lieux != null) {
             predicate = predicate.and(qEvenement.lieux.id.eq(lieux));
+        }
+        if (category != null) {
+            predicate = predicate.and(qEvenement.category.id.eq(category));
+        }
+        if (periode != null) {
+            predicate = predicate.and(qEvenement.periode.id.eq(periode));
         }
 
         Page<Evenement> evenements = evenementService.getAll(pageable, predicate);
@@ -64,10 +71,16 @@ public class EvenementController {
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<EvenementDto> createEvenement(@RequestParam ("libelle") String libelle,
                                                         @RequestParam ("description") String description,
-                                                        @RequestParam ("lieux.id") String lieuxId) {
+                                                        @RequestParam ("lieux.id") String lieuxId,
+                                                        @RequestParam ("category.id") String categoryId,
+                                                        @RequestParam ("perdiode.id") String periodeId) {
         Lieux lieux = new Lieux();
         lieux.setId(lieuxId);
-        EvenementInput evenementInput = new EvenementInput(libelle, description, lieux);
+        Category category = new Category();
+        category.setId(categoryId);
+        Periode periode = new Periode();
+        periode.setId(periodeId);
+        EvenementInput evenementInput = new EvenementInput(libelle, description, lieux, category, periode);
         EvenementDto evenementDto = evenementService.createEvenement(evenementInput);
         return ResponseEntity.status(201).body(evenementDto);
     }
