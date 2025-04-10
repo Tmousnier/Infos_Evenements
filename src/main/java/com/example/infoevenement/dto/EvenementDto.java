@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 public class EvenementDto {
-    String libelle;
-    String description;
-    Lieux lieux;
+    private String libelle;
+    private String description;
+    private Lieux lieux;
 }

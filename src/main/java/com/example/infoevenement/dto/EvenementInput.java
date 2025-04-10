@@ -1,8 +1,6 @@
 package com.example.infoevenement.dto;
 
-import com.example.infoevenement.dao.Evenement;
 import com.example.infoevenement.dao.Lieux;
-
 
 public record EvenementInput (
      String libelle,
@@ -21,7 +19,3 @@ public record EvenementInput (
         }
     }
 }
-
-
-
-
