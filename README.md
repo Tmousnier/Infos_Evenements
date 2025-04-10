@@ -44,3 +44,13 @@ Le projet comporte **4 entités principales** :
    ```bash
    git clone https://github.com/Tmousnier/Infos_Evenements
    cd Infos_Evenements
+## Exemple de requêtes 
+   ```bash
+       # Requête pour récupérer tous les événements
+        http://localhost:8080/api/v1/evenement/search?libelle=t  
+       # Requête pour récupérer / améliorer et supprimer l'evénement avec l'id
+       http://localhost:8080/api/v1/evenement/9dc13fba-785f-4f10-812b-297f4cde953e
+       # Requête pour Cree un événement
+       http://localhost:8080/api/v1/evenement
+       
+    
