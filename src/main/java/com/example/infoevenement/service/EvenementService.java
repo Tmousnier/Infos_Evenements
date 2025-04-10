@@ -1,5 +1,5 @@
 package com.example.infoevenement.service;
-import com.example.infoevenement.Mapper.EvenementMapper;
+import com.example.infoevenement.mapper.EvenementMapper;
 import com.example.infoevenement.dao.Evenement;
 import com.example.infoevenement.dao.Lieux;
 import com.example.infoevenement.dto.EvenementDto;
@@ -7,12 +7,12 @@ import com.example.infoevenement.dto.EvenementInput;
 import com.example.infoevenement.repository.EvenementRepository;
 import com.example.infoevenement.repository.LieuxRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@SpringBootApplication
+@Service
 public class EvenementService {
 
     private final EvenementRepository evenementRepository;
