@@ -14,4 +14,5 @@ CONSTRAINT fk_evenement_periode FOREIGN KEY (periode_id)
     REFERENCES Periode(id),
 
 CONSTRAINT fk_evenement_lieu FOREIGN KEY (lieu_id)
-    REFERENCES Lieu(id)*/
+    REFERENCES Lieu(id)
+   */
