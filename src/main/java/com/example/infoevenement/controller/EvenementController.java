@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+
 @RestController
 @RequestMapping("api/v1/evenement")
 public class EvenementController {
@@ -36,8 +38,9 @@ public class EvenementController {
             @RequestParam(value = "libelle", required = false) String libelle,
             @RequestParam(value = "lieux", required = false) String lieux,
             @RequestParam(value = "category", required = false) String category,
-            @RequestParam(value = "periode", required = false) String periode,
-
+            @RequestParam(value = "dateDebut", required = false) Instant dateDebut,
+            @RequestParam(value = "dateFin", required = false) Instant dateFin,
+            @RequestParam(value = "statut", required = false) String statut,
             Pageable pageable) {
 
         QEvenement qEvenement = QEvenement.evenement;
@@ -49,10 +52,16 @@ public class EvenementController {
             predicate = predicate.and(qEvenement.lieux.id.eq(lieux));
         }
         if (category != null) {
-            predicate = predicate.and(qEvenement.category.id.eq(category));
+            predicate = predicate.and(qEvenement.category.libelle.containsIgnoreCase(category));
         }
-        if (periode != null) {
-            predicate = predicate.and(qEvenement.periode.id.eq(periode));
+        if (dateDebut != null) {
+            predicate = predicate.and(qEvenement.periode.dateDebut.eq(dateDebut));
+        }
+        if (dateFin != null) {
+            predicate = predicate.and(qEvenement.periode.dateFin.eq(dateFin));
+        }
+        if (statut != null) {
+            predicate = predicate.and(qEvenement.periode.statut.containsIgnoreCase(statut));
         }
 
         Page<Evenement> evenements = evenementService.getAll(pageable, predicate);
